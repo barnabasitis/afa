@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-4">
+		<div class="page-header">
+			<h2 class="text-center">{{ student.username }}</h2>
+		</div>
+		<div>
+			<span class="badge text-start">{{ student.class_.name }} </span>
+		</div>
+		<div class="col-md-1">
+			<div class="page-header">
+				<h5>Information</h5>
+			</div>
+			<div>
+				<h5><span class="fw-bolder">Full name:</span> <span class="badge">-</span></h5>
+				<h5><span class="fw-bolder">Email Address:</span> <span class="badge">{{ student.email }}</span></h5>
+				<h5><span class="fw-bolder">Registration Number:</span> <span class="badge">{{ student.reg_num }}</span></h5>
+				<h5><span class="fw-bolder">Class:</span> <span class="badge">{{ student.class_.name }}</span></h5>
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h3>Login</h3>
+	</div>
+	{% for msg in get_flashed_messages() %}
+		<p>{{ msg }}
+	{% endfor %}
+	<div class="col-md-5">
+		{{ wtf.quick_form(form) }}
+	</div>
+{% endblock %}
