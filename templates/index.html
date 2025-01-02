@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% if current_user.is_authenticated %}
+	{% for msg in get_flashed_messages() %}
+		<p>{{ msg }}</p>
+	{% endfor %}
+	
+	{% if current_user.role.name == "Teacher" %}
+		{% include "teacher_dashboard.html" %}
+	{% endif %}
+	
+		{% if current_user.can(Permission.ADMIN) %}
+		<ul>
+			{% for user in users %}
+			{% if not user.role.name == "Admin" %}
+				<li><a href="{{ url_for('view_user', username=user.username) }}">{{ user.username }} </a></li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+		{% endif %}
+		
+		{% if current_user.can(Permission.ADMIN) %}
+			<div class="page-header">
+				<h3>Students</div>
+			</div>
+			<div class="col-md-4">
+			
+			<!-- SS1 STUDENTS -->
+			{% if sss1_students %}
+			<div class="page-header">
+				<h5>SSS1 Students</h5>
+			</div>
+			<ul>
+				{% for student in sss1_students %}
+					<li>
+					<a href="{{ url_for('admin_view_student', username=student.username) }}">{{ student.username }}</a>
+					{% if not student.class_rep %}
+						<a class="badge" href="{{ url_for('assign_rep', id=student.id) }}">Assign Rep</a>
+					{% else %}
+						<a class="btn btn-danger btn-xs" href="{{ url_for('remove_rep', id=student.id) }}">Remove rep</a>
+					{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			
+			<!-- SSS2 STUDENTS -->
+			{% if sss2_students %}
+			<div class="page-header">
+				<h5>SSS1 Students</h5>
+			</div>
+			<ul>
+				{% for student in sss2_students %}
+					<li>
+					<a href="{{ url_for('admin_view_student', username=student.username) }}">{{ student.username }}</a>
+					{% if not student.class_rep %}
+						<a class="badge" href="{{ url_for('assign_rep', id=student.id) }}">Assign Rep</a>
+					{% else %}
+						<a class="btn btn-danger btn-xs" href="{{ url_for('remove_rep', id=student.id) }}">Remove rep</a>
+					{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			
+			<!-- SSS3 STUDENTS -->
+			{% if sss2_students %}
+			<div class="page-header">
+				<h5>SSS1 Students</h5>
+			</div>
+			<ul>
+				{% for student in sss3_students %}
+					<li>
+					<a href="{{ url_for('admin_view_student', username=student.username) }}">{{ student.username }}</a>
+					{% if not student.class_rep %}
+						<a class="badge" href="{{ url_for('assign_rep', id=student.id) }}">Assign Rep</a>
+					{% else %}
+						<a class="btn-danger btn-xs" href="{{ url_for('remove_rep', id=student.id) }}">Remove rep</a>
+					{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			</div>
+		{% endif %}
+		
+		{% if current_user.can(Permission.CASHIER) %}
+			<div class="page-header">
+				<h3>Students</div>
+			</div>
+			<div class="col-md-4">
+			<ul>
+				{% for student in students %}
+					<li>
+					<a href="">{{ student.username }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+			</div>
+		{% endif %}
+		{% if current_user.can(Permission.ADMIN) %}
+			<div class="page-header">
+				<h4>Classes</h4>
+			</div>
+			<div class="col-md-4">
+				<ul>
+					{% for c in classes %}
+						<li>
+						{{ c.name }}
+						{% if not c.teachers %}
+						<a class="badge" href="{{ url_for('assign_teacher', id=c.id) }}">Assign teacher</a>
+						{% else %}
+						<br>
+						<a class="btn-primary btn-xs">{{ c.teachers.username }}</a><a class="btn-danger btn-xs" href="{{ url_for('remove_teacher', id=c.id) }}">Remove</a>
+						{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+		<ul class="pagination">
+				
+			<li {% if not class_pagination.has_prev %} class="disabled"{% endif %}>
+				<a href="{% if class_pagination.has_prev %} {{ url_for('index', page=class_pagination.page-1) }} {% else %} #{% endif %}">
+				&laquo;
+				</a>
+			</li>
+				{% for p in class_pagination.iter_pages() %}
+					{% if p %}
+						{% if p == class_pagination.page %}
+							<li class="active">
+								<a href="{{ url_for('index', page=p) }}">{{ p }} </a>
+							</li>
+						{% else %}
+								<li>
+							<a href="{{ url_for('index', page=p) }}">{{ p }} </a>
+						</li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</ul>
+	{% endif %}
+{% endblock %}
