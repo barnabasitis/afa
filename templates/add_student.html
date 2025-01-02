@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h3>Add Student</h3>
+	</div>
+	<div class="col-md-5">
+		{{ wtf.quick_form(form) }}
+	</div>
+{% endblock %}
